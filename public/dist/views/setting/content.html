@@ -1,0 +1,55 @@
+<title>内容设置</title>
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">内容设置</div>
+        <div class="layui-card-body">
+          <script type="text/html" template lay-url="/setting/getSetting/content">
+            <div class="layui-form" lay-filter="">
+              <div class="layui-form-item">
+                <label class="layui-form-label">回复最短</label>
+                <div class="layui-input-inline" style="width: 80px;">
+                  <input type="text" name="content_min_length" lay-verify="number"
+                         value="{{ d.data.content_min_length }}" class="layui-input" placeholder="如: 10">
+                </div>
+                <div class="layui-input-inline layui-input-company">字</div>
+                <div class="layui-form-mid layui-word-aux">单位:字数,填数字</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">回复间隔</label>
+                <div class="layui-input-inline" style="width: 80px;">
+                  <input type="text" name="content_time_limit" lay-verify="number"
+                         value="{{ d.data.content_time_limit }}" class="layui-input" placeholder="如: 60">
+                </div>
+                <div class="layui-input-inline layui-input-company">秒</div>
+                <div class="layui-form-mid layui-word-aux">单位:秒,填数字</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">敏感词库</label>
+                <div class="layui-input-mid">
+                  <textarea name="content_sensitive_words" autocomplete="off" class="layui-textarea"
+                                              rows="5">{{ d.data.content_sensitive_words }}</textarea>
+                </div>
+                <div class="layui-form-mid layui-word-aux">社区内容中如出现敏感词将进入审核，<br>支持普通字符串和正则表达式，每行一个。<br>正则表达式请以
+                  <code>{</code> 开始、以 <code>}</code> 结束，<br>且需符合 <a href="http://cn2.php.net/manual/zh/pcre.pattern.php"
+                                                                    target="_blank">PCRE 模式</a>，如
+                  <code>{/敏\s*感\s*词/i}</code>。
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit lay-filter="set_setting" lay-type="content">确认保存</button>
+                </div>
+              </div>
+            </div>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use('set', layui.factory('set'));
+</script>

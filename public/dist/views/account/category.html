@@ -1,0 +1,153 @@
+<title>账号类型</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>账号类型</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-list">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief" lay-filter="component-tabs-hash">
+      <ul class="layui-tab-title">
+        <li class="layui-this">账号类型</li>
+        <li><a href="javascript:;" class="edit-category">添加类型</a></li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <div class="LAY-list-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
+          </div>
+          <table id="LAY-category-list" lay-filter="LAY-category-list"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/html" id="category-template">
+  <div class="modal-content">
+    <form class="layui-form" method="post" id="category-form" onsubmit="return false;">
+      <input type="hidden" name="id" value="{{ d.id }}">
+      <div class="layui-form-item">
+        <label class="layui-form-label">类型名称</label>
+        <div class="layui-input-block">
+          <input type="text" name="title" value="{{ d.title }}" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>
+    </form>
+  </div>
+</script>
+<script>
+  layui.use(['admin', 'table', 'util', 'layer', 'laytpl'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,table = layui.table
+        ,element = layui.element
+        ,a = layui.setter
+        ,u = layui.data(a.tableName)
+        ,layer = layui.layer
+        ,laytpl = layui.laytpl;
+
+    table.render({
+      id: '#LAY-category-list',
+      elem: '#LAY-category-list'
+      ,url: '/category/list?token=' + u[a.request.tokenName]
+      ,page: true
+      ,cols: [[
+        {type: 'checkbox', fixed: 'left'},
+        {field: 'id', title: 'ID', wdith: 50, templet: '<div>{{ d.id }}</div>'},
+        {field: 'title', title: '类别', wdith: 200, templet: '<div><a href="javascript:;" class="edit-category" data-id="{{ d.id }}" data-title="{{  d.title }}">{{ d.title }}</a></div>'},
+        {field: 'control', title: '操作', wdith: 50, templet: '<div><a lay-href="/account/list/category_id={{ d.id }}">查看账号</a></div>'}
+      ]]
+      ,skin: 'line'
+    });
+
+    $(document).on('click', '.edit-category', function (e){
+      e.preventDefault();
+      var category_id = 0, title = '';
+      if($(this).data('id')){
+        category_id = $(this).data('id');
+      }
+      if($(this).data('title')){
+        title = $(this).data('title');
+      }
+      laytpl($('#category-template').html()).render({
+        id: category_id,
+        title: title
+      }, function(html){
+        layer.open({
+          title: '添加/修改类型',
+          content: html,
+          btn: ['确认', '取消'],
+          yes: function(index, layero){
+            var fields = admin.getFields($('#category-form'));
+
+            admin.req({
+              url: '/category/save'
+              ,data: fields
+              ,type: 'post'
+              ,done: function(res){
+                layer.msg(res.msg, {
+                  offset: '15px'
+                  ,icon: 1
+                  ,time: 1000
+                });
+
+                table.reload('#LAY-category-list'); //刷新表格
+              }
+              ,fail: function(res){
+                layer.msg(res.msg, {
+                  offset: '15px'
+                  ,icon: 2
+                });
+              }
+            });
+          }
+        });
+      });
+
+    });
+
+    //事件处理
+    var events = {
+      del: function(othis, type){
+        var checkStatus = table.checkStatus('LAY-category-list')
+            ,data = checkStatus.data,
+            ids = []; //获得选中的数据
+        if(data.length === 0) return layer.msg('未选中行');
+        for (var i = 0; i < data.length; i++){
+          ids[i] = data[i].uid;
+        }
+        layer.confirm('确定删除选中的数据吗？', function(){
+          admin.req({
+            url: '/category/remove'
+            ,data: {ids: ids}
+            ,type: 'post'
+            ,done: function(res){
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 1
+                ,time: 1000
+              });
+              table.reload('#LAY-category-list'); //刷新表格
+            }
+            ,fail: function(res){
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 2
+              });
+            }
+          });
+        });
+      }
+    };
+
+    $('.LAY-list-btns .layui-btn').on('click', function(){
+      var othis = $(this)
+          ,thisEvent = othis.data('events')
+          ,type = othis.data('type');
+      events[thisEvent] && events[thisEvent].call(this, othis, type);
+    });
+  });
+</script>

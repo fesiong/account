@@ -1,0 +1,86 @@
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md8">
+      <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+          <div class="layui-card">
+            <div class="layui-card-header">快捷方式</div>
+            <div class="layui-card-body">
+              
+              <div class="layui-carousel layadmin-carousel layadmin-shortcut">
+                <div carousel-item>
+                  <ul class="layui-row layui-col-space10">
+                    <li class="layui-col-xs3">
+                      <a lay-href="user/user/list">
+                        <i class="layui-icon layui-icon-website"></i>
+                        <cite>账号管理</cite>
+                      </a>
+                    </li>
+                    <li class="layui-col-xs3">
+                      <a lay-href="setting/tool">
+                        <i class="layui-icon layui-icon-find-fill"></i>
+                        <cite>日程安排</cite>
+                      </a>
+                    </li>
+                    <li class="layui-col-xs3">
+                      <a lay-href="monitor/alive/">
+                        <i class="layui-icon layui-icon-loading-2"></i>
+                        <cite>存活监控</cite>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="layui-col-md6">
+          <div class="layui-card">
+            <div class="layui-card-header">待办事项</div>
+            <div class="layui-card-body">
+
+              <div class="layui-carousel layadmin-carousel layadmin-backlog">
+                <div carousel-item>
+                  <ul class="layui-row layui-col-space10">
+                    <li class="">
+                      <a lay-href="" class="layadmin-backlog-body">
+                        <h3>服务器续费</h3>
+                        <p><cite>ip</cite></p>
+                      </a>
+                    </li>
+                    <li class="">
+                      <a lay-href="" class="layadmin-backlog-body">
+                        <h3>待审帖子</h3>
+                        <p><cite>12</cite></p>
+                      </a>
+                    </li>
+                    <li class="layui-col-xs6">
+                      <a lay-href="" class="layadmin-backlog-body">
+                        <h3>待审商品</h3>
+                        <p><cite>99</cite></p>
+                      </a>
+                    </li>
+                    <li class="layui-col-xs6">
+                      <a lay-href="" class="layadmin-backlog-body">
+                        <h3>待发货</h3>
+                        <p><cite>20</cite></p>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+layui.use('console', layui.factory('console'));
+</script>
+

@@ -1,0 +1,7 @@
+.DS_Store
+.idea
+*.swp
+._*
+app/config/site.php
+app/config/development.php
+app/cache/visits.txt

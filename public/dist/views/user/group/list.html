@@ -1,0 +1,97 @@
+<title>用户组管理</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>用户组管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-list">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">用户组</li>
+        <li><a lay-href="/user/group/edit/id=new">新增用户组</a></li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show" id="list">
+          <div class="LAY-list-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
+          </div>
+
+          <table id="LAY-server-list" lay-filter="LAY-server-list"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'table', 'util'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,table = layui.table
+        ,element = layui.element
+        ,a = layui.setter
+        ,u = layui.data(a.tableName);
+
+    var tplControl = function(d){
+      return '<a lay-href="/user/group/edit/id='+ d.id +'">编辑</a>';
+    };
+
+    table.render({
+      elem: '#LAY-server-list'
+      ,url: '/user/group/list?token=' + u[a.request.tokenName]
+      ,page: true
+      ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field: 'title', title: '用户组', minWidth: 300, templet: '<div>{{ d.title }}</div>'}
+        ,{field: 'control', title: '操作', width: 100, templet: tplControl}
+      ]]
+      ,skin: 'line'
+    });
+
+    //事件处理
+    var events = {
+      del: function(othis, type){
+        var checkStatus = table.checkStatus('LAY-server-list')
+            ,data = checkStatus.data,
+            ids = []; //获得选中的数据
+        if(data.length === 0) return layer.msg('未选中行');
+        for (var i = 0; i < data.length; i++){
+          ids[i] = data[i].id;
+        }
+        layer.confirm('确定删除选中的数据吗？', function(){
+          admin.req({
+            url: '/user/group/remove'
+            ,data: {ids: ids}
+            ,type: 'post'
+            ,done: function(res){
+              //登入成功的提示与跳转
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 1
+                ,time: 1000
+              });
+              table.reload('#LAY-server-list'); //刷新表格
+            }
+            ,fail: function(res){
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 2
+              });
+            }
+          });
+        });
+      }
+    };
+
+    $('.LAY-list-btns .layui-btn').on('click', function(){
+      var othis = $(this)
+          ,thisEvent = othis.data('events')
+          ,type = othis.data('type');
+      events[thisEvent] && events[thisEvent].call(this, othis, type);
+    });
+  });
+</script>

@@ -1,0 +1,48 @@
+<title>站点流量</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>站点流量</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-list">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">站点流量详情</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show" id="list">
+          <table id="LAY-server-list" lay-filter="LAY-server-list"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'table', 'util'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,table = layui.table
+        ,element = layui.element
+        ,a = layui.setter
+        ,u = layui.data(a.tableName);
+
+    table.render({
+      elem: '#LAY-server-list'
+      ,url: '/monitor/visit/detail/'+layui.router().search.id+'?token=' + u[a.request.tokenName]
+      ,page: true
+      ,cols: [[
+        {field: 'add_time', title: '时间', maxWidth: 100, templet: '<div>{{ layui.util.toDateString(d.add_time*1000) }}</div>'}
+        ,{field: 'ip', title: 'IP', width: 120, templet: '<div>{{ d.ip }}</div>'}
+        ,{field: 'url', title: 'URL', width: 300, templet: '<div>{{ d.url }}</div>'}
+        ,{field: 'os', title: '系统', width: 150, templet: '<div>{{ d.os }}</div>'}
+        ,{field: 'broswer', title: '浏览器', width: 200, templet: '<div>{{ d.browser }}</div>'}
+      ]]
+      ,skin: 'line'
+    });
+  });
+</script>

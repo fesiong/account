@@ -1,0 +1,48 @@
+<title>站点操作日志</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>站点操作日志</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-list">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">日志详情</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show" id="list">
+          <table id="LAY-server-list" lay-filter="LAY-server-list"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'table', 'util'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,table = layui.table
+        ,element = layui.element
+        ,a = layui.setter
+        ,u = layui.data(a.tableName);
+
+    table.render({
+      elem: '#LAY-server-list'
+      ,url: '/monitor/action/detail/'+layui.router().search.id+'?token=' + u[a.request.tokenName]
+      ,page: true
+      ,cols: [[
+        {field: 'add_time', title: '时间', maxWidth: 100, templet: '<div>{{ layui.util.toDateString(d.add_time*1000) }}</div>'}
+        ,{field: 'uid', title: '用户ID', width: 100, templet: '<div>{{ d.uid }}</div>'}
+        ,{field: 'ip', title: 'IP', width: 120, templet: '<div>{{ d.ip }}</div>'}
+        ,{field: 'os', title: '操作内容', width: 200, templet: '<div>{{ d.message }}</div>'}
+        ,{field: 'broswer', title: '类别', width: 100, templet: '<div>{{ d.type }}</div>'}
+      ]]
+      ,skin: 'line'
+    });
+  });
+</script>

@@ -1,0 +1,52 @@
+<title>短信接口</title>
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">短信接口</div>
+        <div class="layui-card-body">
+          <blockquote class="layui-elem-quote">只支持使用阿里大于的短信接口。</blockquote>
+          <script type="text/html" template lay-url="/setting/getSetting/sms">
+            <div class="layui-form" lay-filter="">
+              <div class="layui-form-item">
+                <label class="layui-form-label">接口appid</label>
+                <div class="layui-input-mid">
+                  <input type="text" name="sms_appid" value="{{ d.data.sms_appid }}" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">接口密钥</label>
+                <div class="layui-input-mid">
+                  <input type="text" name="sms_key" value="{{ d.data.sms_key }}" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">接口模板</label>
+                <div class="layui-input-mid">
+                  <input type="text" name="sms_template" value="{{ d.data.sms_template }}" autocomplete="off"
+                         class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">短信签名</label>
+                <div class="layui-input-mid">
+                  <input type="text" name="sms_signname" value="{{ d.data.sms_signname }}" autocomplete="off"
+                         class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit lay-filter="set_setting" lay-type="sms">确认保存</button>
+                </div>
+              </div>
+            </div>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use('set', layui.factory('set'));
+</script>

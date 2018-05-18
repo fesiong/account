@@ -1,0 +1,107 @@
+<title>服务器管理</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>服务器管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-app-message">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li><a lay-href="/setting/server/list">服务器列表</a></li>
+        <li class="layui-this">新增服务器</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <script type="text/html" template lay-url="/server/get/{{ layui.router().search.id || 'new' }}">
+            <div class="layui-form" lay-filter="">
+              <input type="hidden" name="id" value="{{ d.data.id || 0 }}">
+              <div class="layui-form-item">
+                <label class="layui-form-label">服务器名称</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="title"
+                         value="{{ d.data.title || '' }}" class="layui-input" placeholder="如: 阿里云华南1">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">服务器IP</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="ip"
+                         value="{{ d.data.ip || '' }}" class="layui-input" placeholder="如: 60.34.56.23">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">服务器价格</label>
+                <div class="layui-input-inline" style="width: 80px;">
+                  <input type="text" name="money" lay-verify="number"
+                         value="{{ d.data.money || '' }}" class="layui-input" placeholder="如: 3000">
+                </div>
+                <div class="layui-input-inline layui-input-company">元/年</div>
+                <div class="layui-form-mid layui-word-aux">单位:元/年,填数字</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">服务器到期</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="end_time"
+                         value="{{ d.data.end_time || '' }}" class="layui-input layui-date">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">备注信息</label>
+                <div class="layui-input-mid">
+                  <textarea name="remark" autocomplete="off" class="layui-textarea"
+                            rows="5">{{ d.data.remark || '' }}</textarea>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit lay-filter="save_server">确认保存</button>
+                </div>
+              </div>
+            </div>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'form', 'laydate'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,a = layui.form
+        ,laydate = layui.laydate;
+
+    laydate.render({
+      elem: '.layui-date'
+    });
+
+    a.on("submit(save_server)", function(t) {
+      admin.req({
+        url: '/server/save'
+        ,data: t.field
+        ,type: 'post'
+        ,done: function(res){
+          //登入成功的提示与跳转
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 1
+            ,time: 1000
+          }, function(){
+            location.hash = '/setting/server/list';
+          });
+        }
+        ,fail: function(res){
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 2
+          });
+        }
+      });
+    });
+  });
+</script>

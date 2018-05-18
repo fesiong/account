@@ -1,0 +1,164 @@
+<title>订单管理</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>订单管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-list">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief" lay-filter="list">
+      <ul class="layui-tab-title">
+        <li lay-id="list" class="layui-this">订单列表</li>
+        <li>搜索</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show" id="list">
+          <div class="LAY-list-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="export">导出全部</button>
+          </div>
+
+          <table id="LAY-server-list" lay-filter="LAY-server-list"></table>
+        </div>
+        <div class="layui-tab-item">
+          <form method="get" onsubmit="return false;">
+          <div class="layui-form" lay-filter="">
+            <div class="layui-form-item">
+              <label class="layui-form-label">订单号</label>
+              <div class="layui-input-mid">
+                <input type="text" name="order_id" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">时间范围</label>
+              <div class="layui-input-inline">
+                <input type="text" name="start_time" autocomplete="off" class="layui-input layui-date">
+              </div>
+              <div class="layui-form-mid">-</div>
+              <div class="layui-input-inline">
+                <input type="text" name="end_time" autocomplete="off" class="layui-input layui-date">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="search">搜索</button>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'form', 'table', 'util', 'laydate'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,table = layui.table
+        ,element = layui.element
+        ,form = layui.form
+        ,a = layui.setter
+        ,u = layui.data(a.tableName)
+        ,laydate = layui.laydate;
+
+    laydate.render({
+      elem: '.layui-date'
+    });
+
+    var tplControl = function(d){
+      return '<a lay-href="/finance/detail/id='+ d.id +'">查看</a>';
+    };
+
+    var listUrl = '/plugin/list?token=' + u[a.request.tokenName];
+
+    table.render({
+      elem: '#LAY-server-list'
+      ,url: listUrl
+      ,page: true
+      ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field: 'title', title: '下单时间', wdith: 150, templet: '<div>{{ d.title }}</div>'}
+        ,{field: 'sub_domain', title: '版本', width: 170, templet: '<div>{{ d.version }}</div>'}
+        ,{field: 'domains', title: '路径', width: 170, templet: '<div>{{ d.location }}</div>'}
+        ,{field: 'remark', title: '备注', minWidth: 150, templet: '<div>{{ d.remark }}</div>'}
+        ,{field: 'control', title: '操作', width: 80, templet: tplControl}
+      ]]
+      ,skin: 'line'
+    });
+
+    //事件处理
+    var events = {
+      del: function(othis, type){
+        var checkStatus = table.checkStatus('LAY-server-list')
+            ,data = checkStatus.data,
+            ids = []; //获得选中的数据
+        if(data.length === 0) return layer.msg('未选中行');
+        for (var i = 0; i < data.length; i++){
+          ids[i] = data[i].id;
+        }
+        layer.confirm('确定删除选中的数据吗？', function(){
+          admin.req({
+            url: '/finance/remove'
+            ,data: {ids: ids}
+            ,type: 'post'
+            ,done: function(res){
+              //登入成功的提示与跳转
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 1
+                ,time: 1000
+              });
+              table.reload('#LAY-server-list'); //刷新表格
+            }
+            ,fail: function(res){
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 2
+              });
+            }
+          });
+        });
+      }
+    };
+
+    $('.LAY-list-btns .layui-btn').on('click', function(){
+      var othis = $(this)
+          ,thisEvent = othis.data('events')
+          ,type = othis.data('type');
+      events[thisEvent] && events[thisEvent].call(this, othis, type);
+    });
+
+
+    form.on("submit(search)", function(t) {
+      var params = admin.urlEncode(t.field);
+      console.log(params);
+      element.tabChange('list', 'list');
+      /*admin.req({
+        url: '/site/save'
+        ,data: t.field
+        ,type: 'post'
+        ,done: function(res){
+          //登入成功的提示与跳转
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 1
+            ,time: 1000
+          }, function(){
+            location.hash = '/site/list';
+          });
+        }
+        ,fail: function(res){
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 2
+          });
+        }
+      });*/
+    });
+  });
+</script>

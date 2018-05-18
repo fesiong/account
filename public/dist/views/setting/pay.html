@@ -1,0 +1,87 @@
+<title>支付设置</title>
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">支付设置</div>
+        <div class="layui-card-body">
+          <script type="text/html" template lay-url="/setting/getSetting/pay">
+            <div class="layui-form" lay-filter="">
+              <fieldset class="layui-elem-field layui-field-title">
+                <legend style="font-size: 16px;">支付宝支付接口</legend>
+                <div class="layui-field-box">
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">支付宝APP_ID</label>
+                    <div class="layui-input-mid">
+                      <input type="text" name="alipay_app_id" value="{{ d.data.alipay_app_id }}"
+                             class="layui-input">
+                    </div>
+                  </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">支付宝商户私钥</label>
+                    <div class="layui-input-mid">
+                      <input type="text" name="alipay_private_key"
+                             value="{{ d.data.alipay_private_key }}" class="layui-input">
+                    </div>
+                  </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">支付宝公钥</label>
+                    <div class="layui-input-mid">
+                      <input type="text" name="alipay_public_key"
+                             value="{{ d.data.alipay_public_key }}" autocomplete="off"
+                             class="layui-input">
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset class="layui-elem-field layui-field-title">
+                <legend style="font-size: 16px;">微信支付接口</legend>
+                <div class="layui-field-box">
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">微信绑定支付APPID</label>
+                    <div class="layui-input-mid">
+                      <input type="text" name="wxpay_appid" value="{{d.data.wxpay_appid}}"
+                             class="layui-input">
+                    </div>
+                  </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">微信商户号(MCHID)</label>
+                    <div class="layui-input-mid">
+                      <input type="text" name="wxpay_mchid" value="{{ d.data.wxpay_mchid }}"
+                             class="layui-input">
+                    </div>
+                  </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">微信商户支付密钥(KEY)</label>
+                    <div class="layui-input-mid">
+                      <input type="text" name="wxpay_key" value="{{ d.data.wxpay_key }}"
+                             autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">公众帐号AppSecret</label>
+                    <div class="layui-input-mid">
+                      <input type="text" name="wxpay_appsecret"
+                             value="{{ d.data.wxpay_appsecret }}" autocomplete="off"
+                             class="layui-input">
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <div class="layui-form-item">
+                <div class="layui-input-mid">
+                  <button class="layui-btn" lay-submit lay-filter="set_setting" lay-type="pay">确认保存
+                  </button>
+                </div>
+              </div>
+            </div>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use('set', layui.factory('set'));
+</script>

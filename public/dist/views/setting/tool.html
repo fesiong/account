@@ -1,0 +1,38 @@
+<title>系统维护</title>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">系统维护</div>
+                <div class="layui-card-body">
+
+                    <div class="layui-form" wid100 lay-filter="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">清理缓存:</label>
+                            <div class="layui-input-inline">
+                                <a href="javascript:;" lay-click="clear-cache" lay-link="/setting/clearCache" class="layui-btn layui-btn-primary">立即清理</a>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">清理错误日志:</label>
+                            <div class="layui-input-inline" style="width: 80px;">
+                                <a href="javascript:;" lay-click="clear-error-log" lay-link="/setting/clearError" class="layui-btn layui-btn-primary">立即清理</a>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">下载错误日志:</label>
+                            <div class="layui-input-inline">
+                                <a href="/setting/getErrorLog" target="_blank" class="layui-btn layui-btn-primary">点击下载</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use('set', layui.factory('set'));
+</script>

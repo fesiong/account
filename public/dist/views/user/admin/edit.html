@@ -1,0 +1,79 @@
+<title>管理员管理</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>管理员管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-app-message">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li><a lay-href="/user/admin/list">管理员</a></li>
+        <li class="layui-this">新增管理员</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <script type="text/html" template lay-url="/user/admin/get/{{ layui.router().search.id || 'new' }}">
+            <div class="layui-form" lay-filter="">
+              <input type="hidden" name="id" value="{{ d.data.id || 0 }}">
+              <div class="layui-form-item">
+                <label class="layui-form-label">用户ID</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="uid"
+                         value="{{ d.data.uid || '' }}" class="layui-input" {{# if(d.data.uid){ }}readonly{{# } }}>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">授权密码</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="password" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">不修改请留空, 第一次必须设置</div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit lay-filter="save_server">确认保存</button>
+                </div>
+              </div>
+            </div>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'form'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,a = layui.form;
+
+    a.on("submit(save_server)", function(t) {
+      admin.req({
+        url: '/user/admin/save'
+        ,data: t.field
+        ,type: 'post'
+        ,done: function(res){
+          //登入成功的提示与跳转
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 1
+            ,time: 1000
+          }, function(){
+            location.hash = '/user/admin/list';
+          });
+        }
+        ,fail: function(res){
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 2
+          });
+        }
+      });
+    });
+  });
+</script>

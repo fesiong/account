@@ -1,0 +1,124 @@
+<title>账号管理</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>账号管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-app-message">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li><a lay-href="/user/group/list">账号列表</a></li>
+        <li class="layui-this">新增账号</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <script type="text/html" template lay-url="/account/get/{{ layui.router().search.id || 'new' }}">
+            <div class="layui-form" lay-filter="">
+              <input type="hidden" name="id" value="{{ d.data.id || 0 }}">
+              <div class="layui-form-item">
+                <label class="layui-form-label">账号名称</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="title" value="{{ d.data.title || '' }}" class="layui-input" placeholder="如: xx服务器">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="user_name" value="{{ d.data.user_name || '' }}" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="password" value="{{ d.data.password || '' }}" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">所属类型</label>
+                <div class="layui-input-inline">
+                  <select name="category_id">
+                    <option value=""></option>
+                    {{#  layui.each(d.data.categories, function(index, item){ }}
+                    <option value="{{ item.id }}" {{# if(d.data.category_id == item.id){ }}selected{{# } }}>{{ item.title }}</option>
+                    {{# }) }}
+                  </select>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">归属账号</label>
+                <div class="layui-input-inline">
+                  <select name="parent_id">
+                    <option value=""></option>
+                    {{#  layui.each(d.data.parents, function(index, item){ }}
+                    <option value="{{ item.id }}" {{# if(d.data.parent_id == item.id){ }}selected{{# } }}>{{ item.title }}</option>
+                    {{# }) }}
+                  </select>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">到期时间</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="end_time" value="{{ d.data.end_time || '' }}" class="layui-input" id="date-field">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">附加信息</label>
+                <div class="layui-input-mid">
+                  <textarea name="message" autocomplete="off" class="layui-textarea"
+                            rows="5">{{ d.data.message || '' }}</textarea>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit lay-filter="save_server">确认保存</button>
+                </div>
+              </div>
+            </div>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'form', 'laydate'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,a = layui.form
+        ,laydate = layui.laydate;
+    setTimeout(function () {
+      a.render();
+    }, 500);
+    laydate.render({
+      elem: '#date-field'
+    });
+    a.on("submit(save_server)", function(t) {
+      admin.req({
+        url: '/account/save'
+        ,data: t.field
+        ,type: 'post'
+        ,done: function(res){
+          //登入成功的提示与跳转
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 1
+            ,time: 1000
+          }, function(){
+            location.hash = '/account/list';
+          });
+        }
+        ,fail: function(res){
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 2
+          });
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,47 @@
+<title>站点用户统计</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>站点用户统计</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-list">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">站点用户统计</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show" id="list">
+          <table id="LAY-server-list" lay-filter="LAY-server-list"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'table', 'util'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,table = layui.table
+        ,element = layui.element
+        ,a = layui.setter
+        ,u = layui.data(a.tableName);
+
+    table.render({
+      elem: '#LAY-server-list'
+      ,url: '/count/user?token=' + u[a.request.tokenName]
+      ,page: true
+      ,cols: [[
+        {field: 'title', title: '站点', wdith: 200, templet: '<div>{{ d.title }}</div>'}
+        ,{field: 'liuliang', title: '昨天', width: 250, templet: '<div>{{ d.yesterday || 0 }}</div>'}
+        ,{field: 'liuliang', title: '7天', width: 250, templet: '<div>{{ d.week || 0 }}</div>'}
+        ,{field: 'liuliang', title: '30天', width: 250, templet: '<div>{{ d.month || 0 }}</div>'}
+      ]]
+      ,skin: 'line'
+    });
+  });
+</script>

@@ -1,0 +1,107 @@
+<title>账号列表</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>账号列表</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-list">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">账号列表</li>
+        <li><a lay-href="/account/edit/id=new">新增账号</a></li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show" id="list">
+          <div class="LAY-list-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
+          </div>
+
+          <table id="LAY-server-list" lay-filter="LAY-server-list"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  layui.use(['admin', 'table', 'util'], function(){
+    var $ = layui.$
+        ,admin = layui.admin
+        ,table = layui.table
+        ,element = layui.element
+        ,a = layui.setter
+        ,u = layui.data(a.tableName)
+        ,layer = layui.layer;
+
+    table.render({
+      id: '#LAY-server-list',
+      elem: '#LAY-server-list'
+      ,url: '/account/list?token=' + u[a.request.tokenName]
+      ,page: false
+      ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field: 'title', title: '账号', width: 150, templet: '<div>{{ d.spacer }}{{ d.title }}</div>'}
+        ,{field: 'username', title: '用户名', width: 150, templet: '<div>{{ d.user_name }}</div>'}
+        ,{field: 'password', title: '密码', width: 150, templet: '<div>{{ d.password }}</div>'}
+        ,{field: 'text', title: '附加信息', minWidth: 300, templet: '<div><div class="show-detail">{{ d.message }}</div></div>'}
+        ,{field: 'add_time', title: '到期时间', width: 150, templet: '<div>{{ layui.util.toDateString(d.end_time*1000, "yyyy-MM-dd") }}</div>'}
+        ,{field: 'type', title: '类型', width: 100, templet: '<div>{{ d.category_title }}</div>'}
+        ,{field: 'control', title: '操作', width: 60, templet: '<div><a lay-href="/account/edit/id={{ d.id }}">编辑</a></div>'}
+      ]]
+      ,skin: 'line'
+    });
+
+    //弹出显示详细备注
+    $(document).on('click', '.show-detail', function(){
+      layer.open({
+        content: admin.nl2br($(this).html())
+      });
+    });
+
+    //事件处理
+    var events = {
+      del: function(othis, type){
+        var checkStatus = table.checkStatus('LAY-server-list')
+            ,data = checkStatus.data,
+            ids = []; //获得选中的数据
+        if(data.length === 0) return layer.msg('未选中行');
+        for (var i = 0; i < data.length; i++){
+          ids[i] = data[i].uid;
+        }
+        layer.confirm('确定删除选中的数据吗？', function(){
+          admin.req({
+            url: '/account/remove'
+            ,data: {ids: ids}
+            ,type: 'post'
+            ,done: function(res){
+              //登入成功的提示与跳转
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 1
+                ,time: 1000
+              });
+              table.reload('#LAY-server-list'); //刷新表格
+            }
+            ,fail: function(res){
+              layer.msg(res.msg, {
+                offset: '15px'
+                ,icon: 2
+              });
+            }
+          });
+        });
+      }
+    };
+
+    $('.LAY-list-btns .layui-btn').on('click', function(){
+      var othis = $(this)
+          ,thisEvent = othis.data('events')
+          ,type = othis.data('type');
+      events[thisEvent] && events[thisEvent].call(this, othis, type);
+    });
+  });
+</script>

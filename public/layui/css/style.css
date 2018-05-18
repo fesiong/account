@@ -1,0 +1,11 @@
+.layui-input-mid {
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+    margin-right: 10px;
+    width: 50%;
+    position: relative;
+}
+.layui-input-inline{
+    width: 300px;
+}

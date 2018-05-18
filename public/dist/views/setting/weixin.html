@@ -1,0 +1,52 @@
+<title>微信登录接口</title>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">微信登录接口</div>
+                <div class="layui-card-body">
+                    <blockquote class="layui-elem-quote">只支持微信服务号。</blockquote>
+                    <script type="text/html" template lay-url="/setting/getSetting/weixin">
+                        <div class="layui-form" lay-filter="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">AppID</label>
+                                <div class="layui-input-mid">
+                                    <input type="text" name="weixin_app_id" value="{{ d.data.weixin_app_id }}" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">AppSecret</label>
+                                <div class="layui-input-mid">
+                                    <input type="text" name="weixin_app_secret" value="{{ d.data.weixin_app_secret }}" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Token</label>
+                                <div class="layui-input-mid">
+                                    <input type="text" name="weixin_token" value="{{ d.data.weixin_token }}" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">EncodingAES Key</label>
+                                <div class="layui-input-mid">
+                                    <input type="text" name="weixin_encoding_aes_key" value="{{ d.data.weixin_encoding_aes_key }}" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="set_setting" lay-type="weixin">确认保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use('set', layui.factory('set'));
+</script>
