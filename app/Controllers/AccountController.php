@@ -193,6 +193,8 @@ class AccountController extends ControllerBase
         $account['parents']    = $parents->toArray();
         if($account['end_time']) {
             $account['end_time'] = date('Y-m-d', $account['end_time']);
+        }else{
+            $account['end_time'] = '';
         }
 
         Helper::json_output(0, null, $account);
